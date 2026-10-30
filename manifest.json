@@ -1,0 +1,23 @@
+{
+  "name": "Movflix",
+  "short_name": "Movflix",
+  "description": "Stream Movies, TV Shows & Anime in 4K Ultra HD",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#141414",
+  "theme_color": "#141414",
+  "orientation": "any",
+  "lang": "en",
+  "categories": ["entertainment", "lifestyle"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%23141414'/><text x='256' y='370' font-size='420' font-weight='900' fill='%23E50914' text-anchor='middle' font-family='Arial,sans-serif'>M</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "related_applications": []
+}

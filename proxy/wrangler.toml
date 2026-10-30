@@ -1,0 +1,7 @@
+name = "movflix-tmdb-proxy"
+main = "tmdb-worker.js"
+compatibility_date = "2024-09-01"
+
+# Secrets are set via CLI (never commit them):
+#   wrangler secret put TMDB_API_KEY
+#   wrangler secret put ALLOWED_ORIGINS

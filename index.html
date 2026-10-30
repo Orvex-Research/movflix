@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://image.tmdb.org https://images.unsplash.com; connect-src 'self'; frame-src https://framextv.cc https://framextv.xyz; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+
+  <title>Movflix – Stream Movies, TV Shows & Anime Online Free</title>
+  <meta name="description" content="Watch unlimited movies, TV shows, and anime online with Movflix. Powered by ultra-fast frameXTV stream extraction with 4K Ultra HD quality.">
+  <meta name="keywords" content="movies online, watch TV shows, anime streaming, free streaming, 4K movies, Movflix">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://idms.eu.cc/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Movflix – Stream Movies, TV Shows & Anime Online">
+  <meta property="og:description" content="Watch unlimited movies, TV shows, and anime online with Movflix. 4K Ultra HD quality streaming.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://idms.eu.cc/">
+  <meta property="og:image" content="https://image.tmdb.org/t/p/original/56v2KjBlU4XaOv9rVYEQypROD7P.jpg">
+  <meta property="og:site_name" content="Movflix">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Movflix – Stream Movies, TV Shows & Anime">
+  <meta name="twitter:description" content="4K Ultra HD streaming for Movies, TV Shows and Anime. Powered by frameXTV.">
+  <meta name="twitter:image" content="https://image.tmdb.org/t/p/original/56v2KjBlU4XaOv9rVYEQypROD7P.jpg">
+
+  <!-- Google Search Console Verification (replace with your code) -->
+  <meta name="google-site-verification" content="YOUR_VERIFICATION_CODE_HERE">
+
+  <!-- Schema.org Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Movflix",
+    "url": "https://idms.eu.cc/",
+    "description": "Stream Movies, TV Shows and Anime online in 4K Ultra HD",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://idms.eu.cc/search.html?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Movflix",
+      "url": "https://idms.eu.cc/"
+    }
+  }
+  </script>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#141414">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Movflix">
+
+  <!-- Fonts & CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-weight='900' fill='%23E50914'>M</text></svg>">
+</head>
+<body>
+
+  <!-- ══ NAVBAR ══════════════════════════════════════════ -->
+  <header id="navbar">
+    <a href="index.html" class="nav-logo" aria-label="Movflix Home">
+      <span class="logo-r">MOV</span><span class="logo-w">FLIX</span>
+    </a>
+
+    <ul class="nav-links" role="navigation" aria-label="Primary navigation">
+      <li><a href="index.html" data-navpage="index.html">Home</a></li>
+      <li><a href="movies.html" data-navpage="movies.html">Movies</a></li>
+      <li><a href="tv.html" data-navpage="tv.html">TV Shows</a></li>
+      <li><a href="anime.html" data-navpage="anime.html">Anime</a></li>
+      <li><a href="mylist.html" data-navpage="mylist.html">My List <span class="nav-badge" id="listBadge">0</span></a></li>
+      <li><a href="history.html" data-navpage="history.html">History</a></li>
+    </ul>
+
+    <div class="nav-right">
+      <!-- Search -->
+      <div class="search-wrap">
+        <div id="searchBox">
+          <button id="searchToggle" aria-label="Search" aria-expanded="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          </button>
+          <input type="search" id="searchInput" placeholder="Search titles, genres..." aria-label="Search Movflix" autocomplete="off">
+          <button id="searchClear" aria-label="Clear search">&times;</button>
+        </div>
+      </div>
+
+
+
+      <!-- Hamburger (mobile) -->
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <nav class="nav-mobile-drawer" id="mobileDrawer" aria-label="Mobile navigation">
+    <a href="index.html" data-navpage="index.html">Home</a>
+    <a href="movies.html" data-navpage="movies.html">Movies</a>
+    <a href="tv.html" data-navpage="tv.html">TV Shows</a>
+    <a href="anime.html" data-navpage="anime.html">Anime</a>
+    <a href="mylist.html" data-navpage="mylist.html">My List</a>
+    <a href="history.html" data-navpage="history.html">History</a>
+    <a href="search.html">Search</a>
+  </nav>
+
+  <!-- ══ HERO ════════════════════════════════════════════ -->
+  <section class="hero" id="heroSection" aria-label="Featured content">
+    <div class="hero-bg" id="heroBg" role="img" aria-label="Hero backdrop"></div>
+    <div class="hero-vignette"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="hero-badge-n" aria-hidden="true">M</span>
+        <span class="hero-badge-type" id="heroBadgeType">MOVFLIX ORIGINAL</span>
+      </div>
+      <h1 class="hero-title" id="heroTitle">Stranger Things</h1>
+      <div class="hero-meta" role="list">
+        <span class="match" role="listitem" id="heroMatch">99% Match</span>
+        <span class="age-badge" role="listitem" id="heroAge">16+</span>
+        <span class="quality-pill" role="listitem">4K UHD</span>
+        <span class="muted-text" role="listitem" id="heroYear">2024</span>
+        <span class="muted-text" role="listitem" id="heroGenres">Sci-Fi • Horror • Drama</span>
+      </div>
+      <p class="hero-desc" id="heroDesc">When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces and one strange little girl.</p>
+      <div class="hero-actions">
+        <button class="btn-white" id="heroPlay">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M8 5v14l11-7z"/></svg>
+          Play Now
+        </button>
+        <button class="btn-ghost" id="heroInfo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="20" height="20"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          More Info
+        </button>
+        <button class="btn-round" id="heroList" aria-label="Add to My List">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="icon-plus"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="icon-check" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="hero-maturity" id="heroMaturity" aria-label="Maturity rating">TV-MA</div>
+  </section>
+
+  <!-- ══ HOME ROWS ════════════════════════════════════════ -->
+  <main id="homeRows" aria-label="Content catalog">
+    <!-- Rows injected by JS -->
+  </main>
+
+  <!-- ══ FOOTER ════════════════════════════════════════════ -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <span class="logo-r">MOV</span><span class="logo-w">FLIX</span>
+      </div>
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="#">Audio Description</a>
+        <a href="#">Help Center</a>
+        <a href="#">Gift Cards</a>
+        <a href="#">Media Center</a>
+        <a href="#">Investor Relations</a>
+        <a href="#">Jobs</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Privacy</a>
+        <a href="#">Legal Notices</a>
+        <a href="#">Cookie Preferences</a>
+        <a href="#">Corporate Info</a>
+        <a href="#">Contact Us</a>
+      </nav>
+      <p class="footer-copy">&copy; 2026 Movflix Inc. Powered by frameXTV ultra-fast stream discovery engine.</p>
+    </div>
+  </footer>
+
+
+  <!-- Scripts (order matters: security → data → app → search → page) -->
+  <script src="js/security.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/pages/home.js"></script>
+</body>
+</html>

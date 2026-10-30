@@ -1,0 +1,20 @@
+# Render.com Blueprint — deploy with "New +" → "Blueprint" after pushing to GitHub,
+# or create a Web Service manually (Runtime: Node, Build: npm install, Start: node server.js).
+services:
+  - type: web
+    name: movflix
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SITE_URL
+        value: https://idms.eu.cc
+      - key: TMDB_API_KEY
+        sync: false   # set this in the Render dashboard — NEVER commit it
+      - key: API_GATE_SECRET
+        sync: false   # random string used to sign the browser-only API cookie

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://image.tmdb.org https://images.unsplash.com; connect-src 'self'; frame-src https://framextv.cc https://framextv.xyz; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+  <title>TV Shows – Movflix | Stream Series Online</title>
+  <meta name="description" content="Watch the best TV shows and drama series online in 4K on Movflix. Breaking Bad, Stranger Things, The Last of Us and more.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://idms.eu.cc/tv.html">
+  <meta name="google-site-verification" content="YOUR_VERIFICATION_CODE_HERE">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-weight='900' fill='%23E50914'>M</text></svg>">
+</head>
+<body>
+  <header id="navbar">
+    <a href="index.html" class="nav-logo"><span class="logo-r">MOV</span><span class="logo-w">FLIX</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" data-navpage="index.html">Home</a></li>
+      <li><a href="movies.html" data-navpage="movies.html">Movies</a></li>
+      <li><a href="tv.html" data-navpage="tv.html">TV Shows</a></li>
+      <li><a href="anime.html" data-navpage="anime.html">Anime</a></li>
+      <li><a href="mylist.html" data-navpage="mylist.html">My List <span class="nav-badge" id="listBadge">0</span></a></li>
+      <li><a href="history.html" data-navpage="history.html">History</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="search-wrap"><div id="searchBox"><button id="searchToggle" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" width="20" height="20"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button><input type="search" id="searchInput" placeholder="Search..." aria-label="Search" autocomplete="off"><button id="searchClear" aria-label="Clear">&times;</button></div></div>
+      <button class="nav-hamburger" id="hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+  <nav class="nav-mobile-drawer" id="mobileDrawer"><a href="index.html">Home</a><a href="movies.html">Movies</a><a href="tv.html" class="active">TV Shows</a><a href="anime.html">Anime</a><a href="mylist.html">My List</a><a href="history.html">History</a></nav>
+
+  <div class="catalog-hero">
+    <div class="catalog-hero-bg" style="background-image:url('https://image.tmdb.org/t/p/original/56v2KjBlU4XaOv9rVYEQypROD7P.jpg');"></div>
+    <div class="catalog-hero-grad"></div>
+    <div class="catalog-hero-content">
+      <h1>TV Shows</h1>
+      <p>Binge-worthy drama, mystery, thriller and fantasy series</p>
+    </div>
+  </div>
+
+  <main>
+    <div class="section-pad" style="padding-top:28px;padding-bottom:0;">
+      <div class="filter-tabs" role="group" aria-label="Genre filter">
+        <button class="filter-tab active" data-genre="all">All Shows</button>
+        <button class="filter-tab" data-genre="Drama">Drama</button>
+        <button class="filter-tab" data-genre="Sci-Fi">Sci-Fi</button>
+        <button class="filter-tab" data-genre="Crime">Crime</button>
+        <button class="filter-tab" data-genre="Fantasy">Fantasy</button>
+        <button class="filter-tab" data-genre="Mystery">Mystery</button>
+        <button class="filter-tab" data-genre="Thriller">Thriller</button>
+      </div>
+    </div>
+    <div class="section-pad">
+      <div class="mfx-grid" id="tvGrid"></div>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="footer-inner"><div class="footer-logo"><span class="logo-r">MOV</span><span class="logo-w">FLIX</span></div><p class="footer-copy">&copy; 2026 Movflix Inc.</p></div></footer>
+
+  <script src="js/security.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/pages/catalog.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Allow: /watch.html
+Allow: /movies.html
+Allow: /tv.html
+Allow: /anime.html
+Disallow: /search.html
+Disallow: /mylist.html
+Disallow: /history.html
+Disallow: /api/
+Disallow: /healthz
+
+Sitemap: https://idms.eu.cc/sitemap.xml

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://image.tmdb.org https://images.unsplash.com; connect-src 'self'; frame-src https://framextv.cc https://framextv.xyz; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+  <title>Watch History – Movflix</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-weight='900' fill='%23E50914'>M</text></svg>">
+</head>
+<body>
+  <header id="navbar">
+    <a href="index.html" class="nav-logo"><span class="logo-r">MOV</span><span class="logo-w">FLIX</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html" data-navpage="index.html">Home</a></li>
+      <li><a href="movies.html" data-navpage="movies.html">Movies</a></li>
+      <li><a href="tv.html" data-navpage="tv.html">TV Shows</a></li>
+      <li><a href="anime.html" data-navpage="anime.html">Anime</a></li>
+      <li><a href="mylist.html" data-navpage="mylist.html">My List <span class="nav-badge" id="listBadge">0</span></a></li>
+      <li><a href="history.html" data-navpage="history.html">History</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="search-wrap"><div id="searchBox"><button id="searchToggle" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" width="20" height="20"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button><input type="search" id="searchInput" placeholder="Search..." aria-label="Search" autocomplete="off"><button id="searchClear" aria-label="Clear">&times;</button></div></div>
+      <button class="nav-hamburger" id="hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+  <nav class="nav-mobile-drawer" id="mobileDrawer"><a href="index.html">Home</a><a href="movies.html">Movies</a><a href="tv.html">TV Shows</a><a href="anime.html">Anime</a><a href="mylist.html">My List</a><a href="history.html" class="active">History</a></nav>
+
+  <main class="list-page">
+    <div class="list-page-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+      <div>
+        <h1>Watch History</h1>
+        <p>Resume where you left off</p>
+      </div>
+      <button class="btn-outline" id="clearHistBtn" style="font-size:0.86rem;padding:8px 18px;align-self:flex-end;" aria-label="Clear history">Clear All</button>
+    </div>
+    <div class="list-content">
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="80" height="80"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <h3>No watch history yet</h3>
+        <p>When you watch something, it'll appear here so you can resume easily.</p>
+        <a href="index.html" class="btn-red" style="margin-top:8px;">Start Watching</a>
+      </div>
+      <div class="mfx-grid" id="histGrid"></div>
+    </div>
+  </main>
+
+  <footer class="footer"><div class="footer-inner"><div class="footer-logo"><span class="logo-r">MOV</span><span class="logo-w">FLIX</span></div><p class="footer-copy">&copy; 2026 Movflix Inc.</p></div></footer>
+
+  <script src="js/security.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/pages/history.js"></script>
+</body>
+</html>

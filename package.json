@@ -1,0 +1,12 @@
+{
+  "name": "movflix",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Movflix — 4K streaming portal with secure server-side TMDB proxy",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}
