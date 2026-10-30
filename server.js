@@ -19,6 +19,27 @@ const path = require("path");
 const crypto = require("crypto");
 
 const ROOT = __dirname;
+
+// Local .env only (gitignored). Render injects env vars itself — never commit keys.
+(function loadDotEnv() {
+  try {
+    const envPath = path.join(ROOT, ".env");
+    if (!fs.existsSync(envPath)) return;
+    for (const line of fs.readFileSync(envPath, "utf8").split(/\r?\n/)) {
+      const t = line.trim();
+      if (!t || t.startsWith("#")) continue;
+      const i = t.indexOf("=");
+      if (i < 1) continue;
+      const k = t.slice(0, i).trim();
+      let v = t.slice(i + 1).trim();
+      if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+        v = v.slice(1, -1);
+      }
+      if (process.env[k] === undefined) process.env[k] = v;
+    }
+  } catch { /* ignore missing/unreadable .env */ }
+})();
+
 const PORT = parseInt(process.env.PORT, 10) || 3000;
 const TMDB_API_KEY = process.env.TMDB_API_KEY || "";
 const IS_PROD = process.env.NODE_ENV === "production" || process.env.RENDER === "true";
