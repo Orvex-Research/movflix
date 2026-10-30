@@ -99,13 +99,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   const seasonSelect      = document.getElementById("seasonSelect");
   const episodesTrack     = document.getElementById("episodesTrack");
 
-  // DOM Elements - Inline Video Player
-  const playerMediaContainer = document.getElementById("playerMediaContainer");
+  // DOM Elements - Video Player Page
+  const playerView        = document.getElementById("videoPlayerView");
   const playerIframe      = document.getElementById("playerIframe");
   const playerLoader      = document.getElementById("playerLoader");
   const playerErrorOverlay= document.getElementById("playerErrorOverlay");
   const playerRetryBtn    = document.getElementById("playerRetryBtn");
-  const fullscreenBtn     = document.getElementById("playerFullscreenBtn");
+  const playerUiOverlay   = document.getElementById("playerUiOverlay");
+  const exitPlayerBtn     = document.getElementById("exitPlayerBtn");
+  const fullscreenBtn     = document.getElementById("fullscreenBtn");
+  const playerMovieTitle  = document.getElementById("playerMovieTitle");
+  const playerMovieDuration = document.getElementById("playerMovieDuration");
+  const qualityBtn        = document.getElementById("qualityBtn");
+  const qualityCurrentText = document.getElementById("qualityCurrentText");
+  const qualityMenu       = document.getElementById("qualityMenu");
+  const audioSubBtn       = document.getElementById("audioSubBtn");
+  const audioSubModal     = document.getElementById("audioSubModal");
+  const closeAudioSubModal = document.getElementById("closeAudioSubModal");
 
 
 
@@ -292,15 +302,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         epCard.addEventListener("click", () => {
           season = sNum;
           episode = e;
-          document.querySelectorAll(".ep-card").forEach(c => c.classList.remove("active"));
-          epCard.classList.add("active");
-          if (detailDuration) {
-            detailDuration.textContent = `Season ${season} • Ep ${episode}`;
-          }
-          loadStreamEmbed();
-          if (playerMediaContainer) {
-            playerMediaContainer.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
+          openPlayer();
         });
         episodesTrack.appendChild(epCard);
       }
@@ -310,9 +312,47 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderTrack(season);
   }
 
+
   // ═══════════════════════════════════════════════════════════
-  // INLINE CINEMA PLAYER CONTROLLER
+  // POPULATE & MANAGE REFERENCE 2: FULL-SCREEN VIDEO PLAYER
   // ═══════════════════════════════════════════════════════════
+
+  function openPlayer() {
+    isPlaying = true;
+    detailsView.style.display = "none";
+    playerView.style.display = "flex";
+
+    // Set top header info (Reference 2)
+    if (playerMovieTitle) playerMovieTitle.textContent = item.title;
+    if (playerMovieDuration) {
+      playerMovieDuration.textContent = item.type === "tv"
+        ? `Season ${season} • Episode ${episode}`
+        : (item.duration || "2h 25m");
+    }
+
+    loadStreamEmbed();
+    resetIdleTimer();
+
+    // Save to history
+    if (typeof Store !== "undefined" && Store.addHistory) {
+      Store.addHistory(item, season, episode, 0, (item.runtimeMinutes || 145) * 60);
+    }
+  }
+
+  function closePlayer() {
+    isPlaying = false;
+    clearTimeout(idleTimeout);
+    playerView.style.display = "none";
+    detailsView.style.display = "block";
+    if (playerIframe) playerIframe.src = "";
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
+      if (exit) {
+        try { exit.call(document); } catch (e) {}
+      }
+    }
+    unlockOrientation();
+  }
 
   function loadStreamEmbed() {
     if (playerLoader) playerLoader.style.opacity = "1";
@@ -352,10 +392,76 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Load stream immediately on page load
-  loadStreamEmbed();
-  if (typeof Store !== "undefined" && Store.addHistory) {
-    Store.addHistory(item, season, episode, 0, (item.runtimeMinutes || 145) * 60);
+  // Controls auto-hide on inactivity
+  function resetIdleTimer() {
+    if (playerUiOverlay) playerUiOverlay.classList.remove("idle");
+    clearTimeout(idleTimeout);
+    if (isPlaying) {
+      idleTimeout = setTimeout(() => {
+        if (playerUiOverlay) playerUiOverlay.classList.add("idle");
+      }, 3500);
+    }
+  }
+
+  playerView.addEventListener("mousemove", resetIdleTimer);
+  playerView.addEventListener("click", resetIdleTimer);
+  playerView.addEventListener("touchstart", resetIdleTimer, { passive: true });
+
+  // Play button click from Details Page
+  if (detailsPlayBtn) {
+    detailsPlayBtn.addEventListener("click", openPlayer);
+  }
+
+  // Exit Player button
+  if (exitPlayerBtn) {
+    exitPlayerBtn.addEventListener("click", closePlayer);
+  }
+
+  // AutoPlay support
+  if (autoPlay) {
+    openPlayer();
+  }
+
+  // Quality selector dropdown
+  if (qualityBtn && qualityMenu) {
+    qualityBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isVisible = qualityMenu.style.display === "block";
+      qualityMenu.style.display = isVisible ? "none" : "block";
+    });
+
+    document.addEventListener("click", () => {
+      qualityMenu.style.display = "none";
+    });
+
+    qualityMenu.querySelectorAll(".quality-option").forEach(opt => {
+      opt.addEventListener("click", (e) => {
+        e.stopPropagation();
+        qualityMenu.querySelectorAll(".quality-option").forEach(o => o.classList.remove("active"));
+        opt.classList.add("active");
+        const q = opt.dataset.quality;
+        if (qualityCurrentText) {
+          qualityCurrentText.textContent = q === "4k" ? "Quality 4K UHD" : (q === "720p" ? "Quality 720p" : "Quality 1080p");
+        }
+        qualityMenu.style.display = "none";
+        loadStreamEmbed();
+        if (typeof MFX !== "undefined" && MFX.toast) {
+          MFX.toast(`Switched quality to ${opt.textContent}`, "info");
+        }
+      });
+    });
+  }
+
+  // Audio & Subtitles Dialog
+  if (audioSubBtn && audioSubModal) {
+    audioSubBtn.addEventListener("click", () => {
+      audioSubModal.showModal();
+    });
+  }
+  if (closeAudioSubModal && audioSubModal) {
+    closeAudioSubModal.addEventListener("click", () => {
+      audioSubModal.close();
+    });
   }
 
   // ─────────────────────────────────────────────────────────
@@ -391,18 +497,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.msFullscreenElement
     );
 
-    const target = playerMediaContainer || playerIframe || document.documentElement;
-
     if (!isFs) {
+      const el = playerView || document.documentElement;
       try {
-        if (target.requestFullscreen) {
-          await target.requestFullscreen();
-        } else if (target.webkitRequestFullscreen) {
-          await target.webkitRequestFullscreen();
-        } else if (target.mozRequestFullScreen) {
-          await target.mozRequestFullScreen();
-        } else if (target.msRequestFullscreen) {
-          await target.msRequestFullscreen();
+        if (el.requestFullscreen) {
+          await el.requestFullscreen();
+        } else if (el.webkitRequestFullscreen) {
+          await el.webkitRequestFullscreen();
+        } else if (el.mozRequestFullScreen) {
+          await el.mozRequestFullScreen();
+        } else if (el.msRequestFullscreen) {
+          await el.msRequestFullscreen();
         }
       } catch (e) {}
       await lockLandscape();

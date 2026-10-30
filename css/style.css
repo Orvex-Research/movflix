@@ -1072,37 +1072,28 @@ select, input { font-family: var(--font); }
 
 
 /* ─────────────────────────────────────────────────────────────
-/* ─────────────────────────────────────────────────────────────
-   2. INLINE & FULLSCREEN VIDEO PLAYER INTERFACE
+   2. FULL-SCREEN VIDEO PLAYER INTERFACE (Reference Screenshot 2)
    ───────────────────────────────────────────────────────────── */
-.inline-player-section {
-  width: 100%;
-  display: flex;
-  justify-content: center;
+.video-player-view {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
   background: #000;
-  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  user-select: none;
 }
 
 .player-media-container {
   width: 100%;
-  max-width: 1100px;
-  aspect-ratio: 16 / 9;
+  height: 100%;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #000;
-  overflow: hidden;
-}
-
-.player-media-container:fullscreen,
-.player-media-container:-webkit-full-screen {
-  width: 100vw !important;
-  height: 100vh !important;
-  max-width: none !important;
-  border-radius: 0 !important;
-  border: none !important;
-  aspect-ratio: auto !important;
 }
 
 #playerIframe {
@@ -1110,7 +1101,6 @@ select, input { font-family: var(--font); }
   height: 100%;
   border: none;
   background: #000;
-  display: block;
 }
 
 /* Loader & Error states */
