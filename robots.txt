@@ -1,4 +1,6 @@
 User-agent: *
+Allow: /sitemap.xml
+Allow: /robots.txt
 Allow: /
 Allow: /watch.html
 Allow: /movies.html
@@ -11,3 +13,4 @@ Disallow: /api/
 Disallow: /healthz
 
 Sitemap: https://idms.eu.cc/sitemap.xml
+Sitemap: https://idms.eu.cc/sitemap.txt

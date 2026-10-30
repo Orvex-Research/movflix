@@ -1,262 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-
-  <!-- Core Pages -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://idms.eu.cc/</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
   </url>
   <url>
     <loc>https://idms.eu.cc/movies.html</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://idms.eu.cc/tv.html</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://idms.eu.cc/anime.html</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
   </url>
-
-  <!-- Titles & Watch URLs for Google Search Indexing -->
   <url>
     <loc>https://idms.eu.cc/watch.html?id=stranger-things</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/uOOtwVbSr4QDjAGIifLDwpb2Pdl.jpg</image:loc>
-      <image:title>Stranger Things – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=arcane</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/87C0wecB8bHb1PsrKBI4kJiEkgV.jpg</image:loc>
-      <image:title>Arcane: League of Legends – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=the-last-of-us</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/dmo6TYuuJgaYinXBPjrgG9mB5od.jpg</image:loc>
-      <image:title>The Last of Us – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=wednesday</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/9PFonBhy4cQy7Jz20NpMygczOkv.jpg</image:loc>
-      <image:title>Wednesday – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=breaking-bad</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg</image:loc>
-      <image:title>Breaking Bad – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=house-of-dragon</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg</image:loc>
-      <image:title>House of the Dragon – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=fallout</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/c15BtJxCXMrISLVmysdsnZUPQft.jpg</image:loc>
-      <image:title>Fallout – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=attack-on-titan</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/hTP1DtLGFamjfu8WqjnuQdP1n4i.jpg</image:loc>
-      <image:title>Attack on Titan – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=jujutsu-kaisen</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/6qQzMJG27XOJsyAEEIisoJB45j2.jpg</image:loc>
-      <image:title>Jujutsu Kaisen – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=demon-slayer</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/xUfRZu2mi8jH6SzQEJGP6tjBuYj.jpg</image:loc>
-      <image:title>Demon Slayer: Kimetsu no Yaiba – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=solo-leveling</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/dqZENchTd7lp5zht7BdlqM7RBhD.jpg</image:loc>
-      <image:title>Solo Leveling – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=one-piece</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/dB4EDhre2dsC2kxYDavyKWqLQwi.jpg</image:loc>
-      <image:title>One Piece – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=blue-lock</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/fcKH1NQzoTXiYO1OrhaFFwTKhBp.jpg</image:loc>
-      <image:title>Blue Lock – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=deadpool-wolverine</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg</image:loc>
-      <image:title>Deadpool &amp; Wolverine – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=dune-part-two</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/6izwz7rsy95ARzTR3poZ8H6c5pp.jpg</image:loc>
-      <image:title>Dune: Part Two – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=oppenheimer</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg</image:loc>
-      <image:title>Oppenheimer – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=spiderman-spiderverse</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg</image:loc>
-      <image:title>Spider-Man: Across the Spider-Verse – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=fight-club</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/jSziioSwPVrOy9Yow3XhWIBDjq1.jpg</image:loc>
-      <image:title>Fight Club – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=interstellar</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg</image:loc>
-      <image:title>Interstellar – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=the-dark-knight</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg</image:loc>
-      <image:title>The Dark Knight – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=gladiator-2</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/2cxhvwyEwRlysAmRH4iodkvo0z5.jpg</image:loc>
-      <image:title>Gladiator II – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=joker</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg</image:loc>
-      <image:title>Joker – Watch Online 4K</image:title>
-    </image:image>
   </url>
   <url>
     <loc>https://idms.eu.cc/watch.html?id=avatar-2</loc>
     <lastmod>2026-10-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <image:image>
-      <image:loc>https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg</image:loc>
-      <image:title>Avatar: The Way of Water – Watch Online 4K</image:title>
-    </image:image>
   </url>
 </urlset>

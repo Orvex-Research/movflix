@@ -265,15 +265,75 @@ function serveStatic(req, res, pathname) {
     if (err || !st.isFile()) {
       // SPA-ish fallback for unknown routes → home
       if (!path.extname(filePath)) {
-        return serveFile(res, path.join(ROOT, "index.html"));
+        return serveFile(req, res, path.join(ROOT, "index.html"));
       }
       res.writeHead(404); res.end("Not found"); return;
     }
-    serveFile(res, filePath);
+    serveFile(req, res, filePath);
   });
 }
 
-function serveFile(res, filePath) {
+function xmlEscape(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function catalogIds() {
+  try {
+    const src = fs.readFileSync(path.join(ROOT, "js", "data.js"), "utf8");
+    const ids = [];
+    const re = /"id"\s*:\s*"([a-z0-9-]+)"/gi;
+    let match;
+    while ((match = re.exec(src))) ids.push(match[1]);
+    return [...new Set(ids)];
+  } catch {
+    return [];
+  }
+}
+
+function sitemapUrls() {
+  const urls = [
+    `${SITE_URL}/`,
+    `${SITE_URL}/movies.html`,
+    `${SITE_URL}/tv.html`,
+    `${SITE_URL}/anime.html`
+  ];
+  for (const id of catalogIds()) {
+    urls.push(`${SITE_URL}/watch.html?id=${encodeURIComponent(id)}`);
+  }
+  return urls;
+}
+
+function buildSitemapXml() {
+  const lastmod = new Date().toISOString().slice(0, 10);
+  const body = sitemapUrls().map((loc) => (
+    `  <url>\n    <loc>${xmlEscape(loc)}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </url>`
+  )).join("\n");
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`;
+}
+
+function buildSitemapTxt() {
+  return sitemapUrls().join("\n") + "\n";
+}
+
+function sendCrawlerBody(req, res, contentType, body) {
+  const buf = Buffer.from(body, "utf8");
+  res.setHeader("Content-Type", contentType);
+  res.setHeader("Content-Length", String(buf.length));
+  res.setHeader("Cache-Control", "public, max-age=300");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.writeHead(200);
+  if (req.method === "HEAD") {
+    res.end();
+    return;
+  }
+  res.end(buf);
+}
+
+function serveFile(req, res, filePath) {
   const ext = path.extname(filePath).toLowerCase();
   const type = MIME[ext] || "application/octet-stream";
   const isHtml = ext === ".html";
@@ -284,8 +344,20 @@ function serveFile(res, filePath) {
       : "public, max-age=86400"                 // assets cached 1 day
   });
   if (isHtml) res.setHeader("Set-Cookie", gateCookie());
+  res.writeHead(200);
+  if (req.method === "HEAD") {
+    res.end();
+    return;
+  }
   const stream = fs.createReadStream(filePath);
-  stream.on("error", () => { res.writeHead(500); res.end("Server error"); });
+  stream.on("error", () => {
+    if (!res.headersSent) {
+      res.writeHead(500);
+      res.end("Server error");
+    } else {
+      res.destroy();
+    }
+  });
   stream.pipe(res);
 }
 
@@ -308,6 +380,30 @@ const server = http.createServer((req, res) => {
   if (url.pathname === "/healthz") {
     res.writeHead(200, { "Content-Type": "text/plain" });
     res.end("ok"); return;
+  }
+
+  // Googlebot issues HEAD then GET and does not follow sitemap redirects.
+  if (url.pathname === "/sitemap.xml" || url.pathname === "/sitemap.txt" || url.pathname === "/robots.txt") {
+    if (req.method !== "GET" && req.method !== "HEAD") {
+      res.writeHead(405, { Allow: "GET, HEAD" });
+      res.end();
+      return;
+    }
+    if (url.pathname === "/sitemap.xml") {
+      return sendCrawlerBody(req, res, "text/xml; charset=utf-8", buildSitemapXml());
+    }
+    if (url.pathname === "/sitemap.txt") {
+      return sendCrawlerBody(req, res, "text/plain; charset=utf-8", buildSitemapTxt());
+    }
+    fs.readFile(path.join(ROOT, "robots.txt"), "utf8", (err, text) => {
+      if (err) {
+        res.writeHead(404);
+        res.end("Not found");
+        return;
+      }
+      sendCrawlerBody(req, res, "text/plain; charset=utf-8", text);
+    });
+    return;
   }
 
   return serveStatic(req, res, url.pathname);
