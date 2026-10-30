@@ -383,13 +383,13 @@ const server = http.createServer((req, res) => {
   }
 
   // Googlebot issues HEAD then GET and does not follow sitemap redirects.
-  if (url.pathname === "/sitemap.xml" || url.pathname === "/sitemap.txt" || url.pathname === "/robots.txt") {
+  if (url.pathname === "/sitemap.xml" || url.pathname === "/mysite.xml" || url.pathname === "/sitemap.txt" || url.pathname === "/robots.txt") {
     if (req.method !== "GET" && req.method !== "HEAD") {
       res.writeHead(405, { Allow: "GET, HEAD" });
       res.end();
       return;
     }
-    if (url.pathname === "/sitemap.xml") {
+    if (url.pathname === "/sitemap.xml" || url.pathname === "/mysite.xml") {
       return sendCrawlerBody(req, res, "text/xml; charset=utf-8", buildSitemapXml());
     }
     if (url.pathname === "/sitemap.txt") {
