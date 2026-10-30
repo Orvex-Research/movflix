@@ -90,7 +90,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const detailsPlayBtn    = document.getElementById("detailsPlayBtn");
   const detailsListBtn    = document.getElementById("detailsListBtn");
   const detailsListText   = document.getElementById("detailsListText");
-  const detailsDownloadBtn = document.getElementById("detailsDownloadBtn");
   const heroMuteToggle    = document.getElementById("heroMuteToggle");
   const heroMuteIcon      = document.getElementById("heroMuteIcon");
   const backBtn           = document.getElementById("backBtn");
@@ -108,6 +107,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const playerRetryBtn    = document.getElementById("playerRetryBtn");
   const playerUiOverlay   = document.getElementById("playerUiOverlay");
   const exitPlayerBtn     = document.getElementById("exitPlayerBtn");
+  const fullscreenBtn     = document.getElementById("fullscreenBtn");
   const playerMovieTitle  = document.getElementById("playerMovieTitle");
   const playerMovieDuration = document.getElementById("playerMovieDuration");
   const qualityBtn        = document.getElementById("qualityBtn");
@@ -116,10 +116,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const audioSubBtn       = document.getElementById("audioSubBtn");
   const audioSubModal     = document.getElementById("audioSubModal");
   const closeAudioSubModal = document.getElementById("closeAudioSubModal");
-  const downloadModal     = document.getElementById("downloadModal");
-  const closeDownloadModal = document.getElementById("closeDownloadModal");
-  const confirmDownloadBtn = document.getElementById("confirmDownloadBtn");
-  const dlModalTitle      = document.getElementById("dlModalTitle");
+
 
 
 
@@ -185,24 +182,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Download Button handler
-  if (detailsDownloadBtn) {
-    detailsDownloadBtn.addEventListener("click", () => {
-      if (dlModalTitle) dlModalTitle.textContent = `Download "${item.title}"`;
-      if (downloadModal) downloadModal.showModal();
-    });
-  }
-  if (closeDownloadModal) {
-    closeDownloadModal.addEventListener("click", () => downloadModal?.close());
-  }
-  if (confirmDownloadBtn) {
-    confirmDownloadBtn.addEventListener("click", () => {
-      downloadModal?.close();
-      if (typeof MFX !== "undefined" && MFX.toast) {
-        MFX.toast("Authorized offline stream link created!", "success");
-      }
-    });
-  }
 
   // Hero sound mute toggle
   if (heroMuteToggle) {
@@ -366,9 +345,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     playerView.style.display = "none";
     detailsView.style.display = "block";
     if (playerIframe) playerIframe.src = "";
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(() => {});
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
+      if (exit) {
+        try { exit.call(document); } catch (e) {}
+      }
     }
+    unlockOrientation();
   }
 
   function loadStreamEmbed() {
@@ -481,16 +464,96 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Fullscreen button
-  if (fullscreenBtn) {
-    fullscreenBtn.addEventListener("click", () => {
-      if (!document.fullscreenElement) {
-        playerView.requestFullscreen().catch(() => {});
-      } else {
-        document.exitFullscreen().catch(() => {});
+  // ─────────────────────────────────────────────────────────
+  // Mobile Fullscreen & Landscape Orientation Lock
+  // ─────────────────────────────────────────────────────────
+  async function lockLandscape() {
+    if (screen.orientation && typeof screen.orientation.lock === "function") {
+      try {
+        await screen.orientation.lock("landscape");
+      } catch (err1) {
+        try {
+          await screen.orientation.lock("landscape-primary");
+        } catch (err2) {
+          // Device or browser doesn't permit orientation lock without user gesture
+        }
       }
+    }
+  }
+
+  function unlockOrientation() {
+    if (screen.orientation && typeof screen.orientation.unlock === "function") {
+      try {
+        screen.orientation.unlock();
+      } catch (e) {}
+    }
+  }
+
+  async function toggleFullscreen() {
+    const isFs = !!(
+      document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullScreenElement ||
+      document.msFullscreenElement
+    );
+
+    if (!isFs) {
+      const el = playerView || document.documentElement;
+      try {
+        if (el.requestFullscreen) {
+          await el.requestFullscreen();
+        } else if (el.webkitRequestFullscreen) {
+          await el.webkitRequestFullscreen();
+        } else if (el.mozRequestFullScreen) {
+          await el.mozRequestFullScreen();
+        } else if (el.msRequestFullscreen) {
+          await el.msRequestFullscreen();
+        }
+      } catch (e) {}
+      await lockLandscape();
+    } else {
+      try {
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          await document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          await document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          await document.msExitFullscreen();
+        }
+      } catch (e) {}
+      unlockOrientation();
+    }
+  }
+
+  if (fullscreenBtn) {
+    fullscreenBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleFullscreen();
     });
   }
+
+  // Auto-lock to landscape whenever fullscreen is activated (including inside the iframe)
+  async function handleFullscreenChange() {
+    const isFs = !!(
+      document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullScreenElement ||
+      document.msFullscreenElement
+    );
+
+    if (isFs) {
+      await lockLandscape();
+    } else {
+      unlockOrientation();
+    }
+  }
+
+  document.addEventListener("fullscreenchange", handleFullscreenChange);
+  document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+  document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+  document.addEventListener("MSFullscreenChange", handleFullscreenChange);
 
   // SDK postMessage helper — locked to the embed origin, never "*"
   function sendPlayerCmd(payload) {

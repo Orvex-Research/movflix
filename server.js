@@ -321,9 +321,12 @@ function buildSitemapTxt() {
 
 function sendCrawlerBody(req, res, contentType, body) {
   const buf = Buffer.from(body, "utf8");
+  const hash = crypto.createHash("md5").update(buf).digest("hex");
   res.setHeader("Content-Type", contentType);
   res.setHeader("Content-Length", String(buf.length));
   res.setHeader("Cache-Control", "public, max-age=300");
+  res.setHeader("ETag", `"${hash}"`);
+  res.setHeader("Last-Modified", new Date().toUTCString());
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.writeHead(200);
   if (req.method === "HEAD") {
@@ -382,17 +385,31 @@ const server = http.createServer((req, res) => {
     res.end("ok"); return;
   }
 
+  const normPath = url.pathname.replace(/\/+$/, "") || "/";
+
   // Googlebot issues HEAD then GET and does not follow sitemap redirects.
-  if (url.pathname === "/sitemap.xml" || url.pathname === "/mysite.xml" || url.pathname === "/sitemap.txt" || url.pathname === "/robots.txt") {
+  if (
+    normPath === "/sitemap.xml" ||
+    normPath === "/sitemap_index.xml" ||
+    normPath === "/sitemap-index.xml" ||
+    normPath === "/mysite.xml" ||
+    normPath === "/sitemap.txt" ||
+    normPath === "/robots.txt"
+  ) {
     if (req.method !== "GET" && req.method !== "HEAD") {
       res.writeHead(405, { Allow: "GET, HEAD" });
       res.end();
       return;
     }
-    if (url.pathname === "/sitemap.xml" || url.pathname === "/mysite.xml") {
-      return sendCrawlerBody(req, res, "text/xml; charset=utf-8", buildSitemapXml());
+    if (
+      normPath === "/sitemap.xml" ||
+      normPath === "/sitemap_index.xml" ||
+      normPath === "/sitemap-index.xml" ||
+      normPath === "/mysite.xml"
+    ) {
+      return sendCrawlerBody(req, res, "application/xml; charset=utf-8", buildSitemapXml());
     }
-    if (url.pathname === "/sitemap.txt") {
+    if (normPath === "/sitemap.txt") {
       return sendCrawlerBody(req, res, "text/plain; charset=utf-8", buildSitemapTxt());
     }
     fs.readFile(path.join(ROOT, "robots.txt"), "utf8", (err, text) => {

@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /sitemap.xml
-Allow: /mysite.xml
+Allow: /sitemap_index.xml
+Allow: /sitemap.txt
 Allow: /robots.txt
 Allow: /
 Allow: /watch.html
