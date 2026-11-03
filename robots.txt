@@ -1,6 +1,8 @@
 User-agent: *
 Allow: /sitemap.xml
 Allow: /sitemap_index.xml
+Allow: /atom.xml
+Allow: /feed.xml
 Allow: /sitemap.txt
 Allow: /robots.txt
 Allow: /
@@ -15,4 +17,5 @@ Disallow: /api/
 Disallow: /healthz
 
 Sitemap: https://idms.eu.cc/sitemap.xml
+Sitemap: https://idms.eu.cc/atom.xml
 Sitemap: https://idms.eu.cc/sitemap.txt

@@ -17,6 +17,7 @@ const https = require("https");
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
+const vm = require("vm");
 
 const ROOT = __dirname;
 
@@ -224,6 +225,7 @@ const MIME = {
   ".js": "application/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".xml": "application/xml; charset=utf-8",
+  ".atom": "application/atom+xml; charset=utf-8",
   ".txt": "text/plain; charset=utf-8",
   ".svg": "image/svg+xml",
   ".png": "image/png",
@@ -274,11 +276,12 @@ function serveStatic(req, res, pathname) {
 }
 
 function xmlEscape(value) {
-  return String(value)
+  return String(value || "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
 }
 
 function catalogIds() {
@@ -317,6 +320,81 @@ function buildSitemapXml() {
 
 function buildSitemapTxt() {
   return sitemapUrls().join("\n") + "\n";
+}
+
+function catalogItems() {
+  try {
+    const src = fs.readFileSync(path.join(ROOT, "js", "data.js"), "utf8");
+    const sandbox = {};
+    vm.runInNewContext(src + "; this.items = MOVFLIX_DB;", sandbox);
+    if (Array.isArray(sandbox.items)) return sandbox.items;
+  } catch { /* fallback below */ }
+  return catalogIds().map((id) => ({
+    id,
+    title: id.replace(/-/g, " "),
+    overview: `Watch ${id.replace(/-/g, " ")} online free on MOVFLIX.`
+  }));
+}
+
+function buildAtomXml() {
+  const updated = new Date().toISOString().slice(0, 10) + "T00:00:00Z";
+  const staticPages = [
+    {
+      title: "MOVFLIX — Watch Free Movies & TV Shows",
+      loc: `${SITE_URL}/`,
+      summary: "Watch trending movies, popular series, and anime online free in HD on MOVFLIX."
+    },
+    {
+      title: "Movies — MOVFLIX",
+      loc: `${SITE_URL}/movies.html`,
+      summary: "Browse and watch trending, popular and top-rated movies free on MOVFLIX."
+    },
+    {
+      title: "TV Series — MOVFLIX",
+      loc: `${SITE_URL}/tv.html`,
+      summary: "Explore top-rated and latest TV series streaming free on MOVFLIX."
+    },
+    {
+      title: "Anime — MOVFLIX",
+      loc: `${SITE_URL}/anime.html`,
+      summary: "Stream popular and trending anime shows and movies on MOVFLIX."
+    }
+  ];
+
+  const items = catalogItems();
+  const mediaEntries = items.map((item) => ({
+    title: `Watch ${item.title}${item.year ? ` (${item.year})` : ""} Online Free — MOVFLIX`,
+    loc: `${SITE_URL}/watch.html?id=${encodeURIComponent(item.id)}`,
+    summary: item.overview || `Watch ${item.title} free in HD on MOVFLIX.`
+  }));
+
+  const allEntries = [...staticPages, ...mediaEntries];
+
+  const entriesXml = allEntries.map((e) => (
+    `  <entry>\n` +
+    `    <title>${xmlEscape(e.title)}</title>\n` +
+    `    <link href="${xmlEscape(e.loc)}" rel="alternate" type="text/html"/>\n` +
+    `    <id>${xmlEscape(e.loc)}</id>\n` +
+    `    <updated>${updated}</updated>\n` +
+    `    <summary>${xmlEscape(e.summary)}</summary>\n` +
+    `  </entry>`
+  )).join("\n");
+
+  return (
+    `<?xml version="1.0" encoding="UTF-8"?>\n` +
+    `<feed xmlns="http://www.w3.org/2005/Atom">\n` +
+    `  <title>MOVFLIX</title>\n` +
+    `  <subtitle>Watch Movies, TV Series &amp; Anime Online Free</subtitle>\n` +
+    `  <link href="${SITE_URL}/atom.xml" rel="self" type="application/atom+xml"/>\n` +
+    `  <link href="${SITE_URL}/" rel="alternate" type="text/html"/>\n` +
+    `  <id>${SITE_URL}/</id>\n` +
+    `  <updated>${updated}</updated>\n` +
+    `  <author>\n` +
+    `    <name>MOVFLIX</name>\n` +
+    `  </author>\n` +
+    `${entriesXml}\n` +
+    `</feed>\n`
+  );
 }
 
 function sendCrawlerBody(req, res, contentType, body) {
@@ -387,12 +465,15 @@ const server = http.createServer((req, res) => {
 
   const normPath = url.pathname.replace(/\/+$/, "") || "/";
 
-  // Googlebot issues HEAD then GET and does not follow sitemap redirects.
+    // Googlebot issues HEAD then GET and does not follow sitemap redirects.
   if (
     normPath === "/sitemap.xml" ||
     normPath === "/sitemap_index.xml" ||
     normPath === "/sitemap-index.xml" ||
     normPath === "/mysite.xml" ||
+    normPath === "/atom.xml" ||
+    normPath === "/feed.xml" ||
+    normPath === "/rss.xml" ||
     normPath === "/sitemap.txt" ||
     normPath === "/robots.txt"
   ) {
@@ -408,6 +489,13 @@ const server = http.createServer((req, res) => {
       normPath === "/mysite.xml"
     ) {
       return sendCrawlerBody(req, res, "application/xml; charset=utf-8", buildSitemapXml());
+    }
+    if (
+      normPath === "/atom.xml" ||
+      normPath === "/feed.xml" ||
+      normPath === "/rss.xml"
+    ) {
+      return sendCrawlerBody(req, res, "application/atom+xml; charset=utf-8", buildAtomXml());
     }
     if (normPath === "/sitemap.txt") {
       return sendCrawlerBody(req, res, "text/plain; charset=utf-8", buildSitemapTxt());
