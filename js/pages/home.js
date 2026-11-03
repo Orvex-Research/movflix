@@ -1,5 +1,6 @@
 /**
  * MOVFLIX — Home page initialization
+ * Automatic New Movies API Hero Slider
  */
 document.addEventListener("DOMContentLoaded", () => {
   Nav.init();
@@ -12,9 +13,37 @@ document.addEventListener("DOMContentLoaded", () => {
     ham.setAttribute("aria-expanded", open);
   });
 
-  // Hero data
-  const HERO_ITEM = DB.trending()[0];
-  setHero(HERO_ITEM);
+  // Hero data: initial fast render from local DB
+  let heroList = DB.trending();
+  let heroIdx = 0;
+  let heroTimer = null;
+
+  setHero(heroList[0]);
+
+  function startHeroTimer() {
+    if (heroTimer) clearInterval(heroTimer);
+    heroTimer = setInterval(() => {
+      if (!heroList || heroList.length === 0) return;
+      heroIdx = (heroIdx + 1) % heroList.length;
+      setHero(heroList[heroIdx]);
+    }, 8000);
+  }
+
+  startHeroTimer();
+
+  // Auto fetch latest new movies from TMDB API for the home slider
+  if (typeof window.MFX_getNewMovies === "function") {
+    window.MFX_getNewMovies().then(newMovies => {
+      if (Array.isArray(newMovies) && newMovies.length > 0) {
+        heroList = newMovies;
+        heroIdx = 0;
+        setHero(heroList[0]);
+        startHeroTimer();
+      }
+    }).catch(err => {
+      console.warn("Could not load API new movies for slider:", err);
+    });
+  }
 
   // Render all home rows
   const container = document.getElementById("homeRows");
@@ -49,43 +78,63 @@ document.addEventListener("DOMContentLoaded", () => {
       container.prepend(sec);
     }
   }
-
-  // Cycle hero every 10s
-  let heroIdx = 0;
-  const trendingList = DB.trending();
-  setInterval(() => {
-    heroIdx = (heroIdx + 1) % trendingList.length;
-    setHero(trendingList[heroIdx]);
-  }, 10000);
 });
 
 function setHero(item) {
   if (!item) return;
   const section = document.getElementById("heroSection");
-  document.getElementById("heroBg").style.backgroundImage = `url('${MFX.safeCssUrl(item.backdrop)}')`;
-  document.getElementById("heroTitle").textContent = item.title;
-  document.getElementById("heroMatch").textContent = `${parseInt(item.match, 10) || 0}% Match`;
-  document.getElementById("heroAge").textContent = item.age;
-  document.getElementById("heroYear").textContent = item.year;
-  document.getElementById("heroGenres").textContent = (item.genres || []).join(" • ");
-  document.getElementById("heroDesc").textContent = item.overview;
-  document.getElementById("heroMaturity").textContent = item.age;
-  document.getElementById("heroBadgeType").textContent = item.type === "tv" ? "SERIES" : "MOVIE";
+  if (!section) return;
+
+  const heroBg = document.getElementById("heroBg");
+  if (heroBg) heroBg.style.backgroundImage = `url('${MFX.safeCssUrl(item.backdrop)}')`;
+
+  const heroTitle = document.getElementById("heroTitle");
+  if (heroTitle) heroTitle.textContent = item.title;
+
+  const heroMatch = document.getElementById("heroMatch");
+  if (heroMatch) heroMatch.textContent = `${parseInt(item.match, 10) || 0}% Match`;
+
+  const heroAge = document.getElementById("heroAge");
+  if (heroAge) heroAge.textContent = item.age || "13+";
+
+  const heroYear = document.getElementById("heroYear");
+  if (heroYear) heroYear.textContent = item.year || new Date().getFullYear();
+
+  const heroGenres = document.getElementById("heroGenres");
+  if (heroGenres) heroGenres.textContent = (item.genres || []).join(" • ");
+
+  const heroDesc = document.getElementById("heroDesc");
+  if (heroDesc) heroDesc.textContent = item.overview || "";
+
+  const heroMaturity = document.getElementById("heroMaturity");
+  if (heroMaturity) heroMaturity.textContent = item.age || "13+";
+
+  const heroBadgeType = document.getElementById("heroBadgeType");
+  if (heroBadgeType) heroBadgeType.textContent = item.badge || (item.type === "tv" ? "SERIES" : "NEW RELEASE");
+
   section.classList.remove("loaded");
   requestAnimationFrame(() => section.classList.add("loaded"));
 
   const inList = Store.inList(item.id);
   const heroList = document.getElementById("heroList");
-  heroList.classList.toggle("active", inList);
-  heroList.querySelector(".icon-plus").style.display = inList ? "none" : "block";
-  heroList.querySelector(".icon-check").style.display = inList ? "block" : "none";
+  if (heroList) {
+    heroList.classList.toggle("active", inList);
+    const iconPlus = heroList.querySelector(".icon-plus");
+    const iconCheck = heroList.querySelector(".icon-check");
+    if (iconPlus) iconPlus.style.display = inList ? "none" : "block";
+    if (iconCheck) iconCheck.style.display = inList ? "block" : "none";
 
-  document.getElementById("heroPlay").onclick = () => MFX.goWatch(item);
-  document.getElementById("heroInfo").onclick = () => MFX.openModal(item);
-  document.getElementById("heroList").onclick = () => {
-    const added = Store.toggleList(item);
-    heroList.classList.toggle("active", added);
-    heroList.querySelector(".icon-plus").style.display = added ? "none" : "block";
-    heroList.querySelector(".icon-check").style.display = added ? "block" : "none";
-  };
+    heroList.onclick = () => {
+      const added = Store.toggleList(item);
+      heroList.classList.toggle("active", added);
+      if (iconPlus) iconPlus.style.display = added ? "none" : "block";
+      if (iconCheck) iconCheck.style.display = added ? "block" : "none";
+    };
+  }
+
+  const heroPlay = document.getElementById("heroPlay");
+  if (heroPlay) heroPlay.onclick = () => MFX.goWatch(item);
+
+  const heroInfo = document.getElementById("heroInfo");
+  if (heroInfo) heroInfo.onclick = () => MFX.openModal(item);
 }

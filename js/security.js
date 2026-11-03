@@ -116,6 +116,89 @@
     }
   };
 
+  
+  // ─── 4b. Fetch Latest New & Trending Movies from TMDB API ─────────
+  const TMDB_GENRES = {
+    28: "Action", 12: "Adventure", 16: "Animation", 35: "Comedy",
+    80: "Crime", 99: "Documentary", 18: "Drama", 10751: "Family",
+    14: "Fantasy", 36: "History", 27: "Horror", 10402: "Music",
+    9648: "Mystery", 10749: "Romance", 878: "Sci-Fi", 10770: "TV Movie",
+    53: "Thriller", 10752: "War", 37: "Western", 10759: "Action & Adventure",
+    10762: "Kids", 10763: "News", 10764: "Reality", 10765: "Sci-Fi & Fantasy"
+  };
+
+  function mapTmdbMovie(r) {
+    const title = String(r.title || r.name || "Untitled").slice(0, 300);
+    const year = parseInt(String(r.release_date || r.first_air_date || "").slice(0, 4), 10) || new Date().getFullYear();
+    const vote = Number(r.vote_average) || 7.5;
+    const match = Math.min(99, Math.max(78, Math.floor(vote * 10)));
+    const genreNames = Array.isArray(r.genre_ids) && r.genre_ids.length > 0
+      ? r.genre_ids.map(id => TMDB_GENRES[id]).filter(Boolean).slice(0, 3)
+      : ["Popular", "Trending"];
+    const isHorrorOrCrime = Array.isArray(r.genre_ids) && r.genre_ids.some(id => id === 27 || id === 80);
+    const age = r.adult ? "18+" : (isHorrorOrCrime ? "16+" : "13+");
+
+    return {
+      id: `tmdb-${parseInt(r.id, 10) || 0}`,
+      tmdbId: parseInt(r.id, 10) || 0,
+      type: "movie",
+      title: title,
+      match: match,
+      age: age,
+      year: year,
+      seasons: null,
+      totalEpisodes: null,
+      genres: genreNames,
+      duration: "2h",
+      cast: "Featured Cast",
+      overview: String(r.overview || "").slice(0, 2000) || `Watch ${title} in 4K Ultra HD on Movflix.`,
+      poster: r.poster_path
+        ? `https://image.tmdb.org/t/p/w500${encodeURIComponent(String(r.poster_path).slice(0, 100))}`
+        : "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&q=80",
+      backdrop: r.backdrop_path
+        ? `https://image.tmdb.org/t/p/original${encodeURIComponent(String(r.backdrop_path).slice(0, 100))}`
+        : (r.poster_path ? `https://image.tmdb.org/t/p/w500${encodeURIComponent(String(r.poster_path).slice(0, 100))}` : ""),
+      tags: ["trending", "movie", "new"],
+      badge: "NEW RELEASE"
+    };
+  }
+
+  let _newMoviesCache = null;
+  let _newMoviesCacheTime = 0;
+
+  g.MFX_getNewMovies = async function() {
+    const now = Date.now();
+    if (_newMoviesCache && (now - _newMoviesCacheTime) < 300000) {
+      return _newMoviesCache;
+    }
+
+    try {
+      // 1. Fetch trending movies today
+      let data = await g.MFX_tmdbFetch("/3/trending/movie/day", { page: "1" });
+      let results = (data && Array.isArray(data.results)) ? data.results : [];
+
+      // 2. Fallback to now_playing if trending is empty
+      if (results.length === 0) {
+        data = await g.MFX_tmdbFetch("/3/movie/now_playing", { page: "1" });
+        results = (data && Array.isArray(data.results)) ? data.results : [];
+      }
+
+      // Filter for items with high quality backdrop and poster
+      const validMovies = results
+        .filter(r => r && r.id && r.backdrop_path && r.poster_path && (r.title || r.name))
+        .map(mapTmdbMovie);
+
+      if (validMovies.length > 0) {
+        _newMoviesCache = validMovies;
+        _newMoviesCacheTime = now;
+        return validMovies;
+      }
+    } catch(err) {
+      console.warn("Could not fetch new movies from TMDB:", err);
+    }
+    return [];
+  };
+
   // ─── 5. Fetch Remote Media Details (for dynamic watch pages) ──────
   g.MFX_getMediaDetails = async function(tmdbId, type = "movie") {
     try {

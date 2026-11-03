@@ -168,7 +168,12 @@ function gateCookie() {
 const TMDB_ALLOWED = [
   /^\/3\/search\/multi$/,
   /^\/3\/movie\/\d+$/,
-  /^\/3\/tv\/\d+$/
+  /^\/3\/tv\/\d+$/,
+  /^\/3\/trending\/(all|movie|tv)\/(day|week)$/,
+  /^\/3\/movie\/(now_playing|popular|upcoming|top_rated)$/,
+  /^\/3\/tv\/(popular|top_rated|on_the_air|airing_today)$/,
+  /^\/3\/discover\/(movie|tv)$/,
+  /^\/3\/genre\/(movie|tv)\/list$/
 ];
 
 function proxyTmdb(req, res, url) {
