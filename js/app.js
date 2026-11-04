@@ -25,7 +25,7 @@ function safeImg(url, fallback) {
 
 /** Allow-listed URL made safe for interpolation inside a CSS url('...') value. */
 function safeCssUrl(url) {
-  return safeImg(url).replace(/[^a-zA-Z0-9\-._~:/?#[\]@!$&()*+,;=]/g, "");
+  return safeImg(url).replace(/[^a-zA-Z0-9%\-._~:/?#[\]@!$&()*+,;=]/g, "");
 }
 
 /** Clamp anything to a 0–100 number (progress bars). */

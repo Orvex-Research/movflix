@@ -26,6 +26,13 @@
     return _streamBaseCache;
   }
 
+  function _cleanImgPath(p) {
+    if (!p) return "";
+    const clean = String(p).trim().replace(/[^a-zA-Z0-9_./-]/g, "");
+    return clean.startsWith("/") ? clean : "/" + clean;
+  }
+
+
   // ─── 2. TMDB transport — same-origin secure proxy ────────────────
   // No key here. No fallback key. The server owns the secret.
   g.MFX_tmdbFetch = async function(path, params) {
@@ -100,10 +107,8 @@
             duration: isTv ? null : "2h",
             cast: "Global Stars",
             overview: String(r.overview || "").slice(0, 2000) || `Watch ${title} in 4K Ultra HD on Movflix.`,
-            poster: `https://image.tmdb.org/t/p/w500${encodeURIComponent(String(r.poster_path).slice(0, 100))}`,
-            backdrop: r.backdrop_path
-              ? `https://image.tmdb.org/t/p/original${encodeURIComponent(String(r.backdrop_path).slice(0, 100))}`
-              : `https://image.tmdb.org/t/p/w500${encodeURIComponent(String(r.poster_path).slice(0, 100))}`,
+            poster: r.poster_path ? `https://image.tmdb.org/t/p/w500${_cleanImgPath(r.poster_path)}` : "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&q=80",
+            backdrop: r.backdrop_path ? `https://image.tmdb.org/t/p/original${_cleanImgPath(r.backdrop_path)}` : (r.poster_path ? `https://image.tmdb.org/t/p/original${_cleanImgPath(r.poster_path)}` : ""),
             tags: isTv ? ["tv"] : ["movie"]
           };
         });
@@ -152,12 +157,9 @@
       duration: "2h",
       cast: "Featured Cast",
       overview: String(r.overview || "").slice(0, 2000) || `Watch ${title} in 4K Ultra HD on Movflix.`,
-      poster: r.poster_path
-        ? `https://image.tmdb.org/t/p/w500${encodeURIComponent(String(r.poster_path).slice(0, 100))}`
+      poster: r.poster_path ? `https://image.tmdb.org/t/p/w500${_cleanImgPath(r.poster_path)}`
         : "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&q=80",
-      backdrop: r.backdrop_path
-        ? `https://image.tmdb.org/t/p/original${encodeURIComponent(String(r.backdrop_path).slice(0, 100))}`
-        : (r.poster_path ? `https://image.tmdb.org/t/p/w500${encodeURIComponent(String(r.poster_path).slice(0, 100))}` : ""),
+      backdrop: r.backdrop_path ? `https://image.tmdb.org/t/p/original${_cleanImgPath(r.backdrop_path)}` : (r.poster_path ? `https://image.tmdb.org/t/p/original${_cleanImgPath(r.poster_path)}` : ""),
       tags: ["trending", "movie", "new"],
       badge: "NEW RELEASE"
     };
@@ -247,8 +249,8 @@
         cast: castNames,
         castList: castList,
         overview: String(data.overview || "").slice(0, 2000) || `Watch ${title} online in 4K Ultra HD on Movflix.`,
-        poster: data.poster_path ? `https://image.tmdb.org/t/p/w500${encodeURIComponent(String(data.poster_path).slice(0, 100))}` : "https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg",
-        backdrop: data.backdrop_path ? `https://image.tmdb.org/t/p/original${encodeURIComponent(String(data.backdrop_path).slice(0, 100))}` : "https://image.tmdb.org/t/p/original/yDHYTfA3R0jFYba16jBB1jv82EU.jpg",
+        poster: data.poster_path ? `https://image.tmdb.org/t/p/w500${_cleanImgPath(data.poster_path)}` : "https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg",
+        backdrop: data.backdrop_path ? `https://image.tmdb.org/t/p/original${_cleanImgPath(data.backdrop_path)}` : "https://image.tmdb.org/t/p/original/yDHYTfA3R0jFYba16jBB1jv82EU.jpg",
         tags: [isTv ? "tv" : "movie"]
       };
     } catch(err) {
