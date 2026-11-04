@@ -530,6 +530,7 @@ const server = http.createServer((req, res) => {
     }
     if (
       normPath === "/atom.xml" ||
+      normPath === "/feeds/posts/default" ||
       normPath === "/feed.xml" ||
       normPath === "/rss.xml"
     ) {
