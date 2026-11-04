@@ -307,7 +307,9 @@ function sitemapUrls() {
     `${SITE_URL}/`,
     `${SITE_URL}/movies.html`,
     `${SITE_URL}/tv.html`,
-    `${SITE_URL}/anime.html`
+    `${SITE_URL}/anime.html`,
+    `${SITE_URL}/privacy.html`,
+    `${SITE_URL}/terms.html`
   ];
   for (const id of catalogIds()) {
     urls.push(`${SITE_URL}/watch.html?id=${encodeURIComponent(id)}`);
@@ -363,6 +365,16 @@ function buildAtomXml() {
       title: "Anime — MOVFLIX",
       loc: `${SITE_URL}/anime.html`,
       summary: "Stream popular and trending anime shows and movies on MOVFLIX."
+    },
+    {
+      title: "Privacy Policy — MOVFLIX",
+      loc: `${SITE_URL}/privacy.html`,
+      summary: "Movflix Privacy Policy — Learn how your data and privacy are handled."
+    },
+    {
+      title: "Terms of Use — MOVFLIX",
+      loc: `${SITE_URL}/terms.html`,
+      summary: "Movflix Terms of Use and service disclaimer."
     }
   ];
 
@@ -409,7 +421,9 @@ function sendCrawlerBody(req, res, contentType, body) {
   res.setHeader("Content-Length", String(buf.length));
   res.setHeader("Cache-Control", "public, max-age=300");
   res.setHeader("ETag", `"${hash}"`);
-  res.setHeader("Last-Modified", new Date().toUTCString());
+  const todayUtc = new Date();
+  todayUtc.setUTCHours(0, 0, 0, 0);
+  res.setHeader("Last-Modified", todayUtc.toUTCString());
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.writeHead(200);
   if (req.method === "HEAD") {

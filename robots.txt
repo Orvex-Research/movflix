@@ -10,6 +10,8 @@ Allow: /watch.html
 Allow: /movies.html
 Allow: /tv.html
 Allow: /anime.html
+Allow: /privacy.html
+Allow: /terms.html
 Disallow: /search.html
 Disallow: /mylist.html
 Disallow: /history.html
@@ -18,4 +20,5 @@ Disallow: /healthz
 
 Sitemap: https://idms.eu.cc/sitemap.xml
 Sitemap: https://idms.eu.cc/atom.xml
+Sitemap: https://idms.eu.cc/feed.xml
 Sitemap: https://idms.eu.cc/sitemap.txt
