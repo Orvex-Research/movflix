@@ -344,71 +344,89 @@ function catalogItems() {
 }
 
 function buildAtomXml() {
-  const updated = new Date().toISOString().slice(0, 10) + "T00:00:00Z";
+  const updatedIso = `${new Date().toISOString().slice(0, 10)}T00:00:00.000Z`;
   const staticPages = [
     {
-      title: "MOVFLIX — Watch Free Movies & TV Shows",
+      id: "page-home",
+      title: "IDMS – Discover Latest Movies, Popular Films & Entertainment",
       loc: `${SITE_URL}/`,
-      summary: "Watch trending movies, popular series, and anime online free in HD on MOVFLIX."
+      summary: "IDMS is your destination for discovering movies and entertainment. Watch trending movies, popular series, and anime online free in HD on IDMS."
     },
     {
-      title: "Movies — MOVFLIX",
+      id: "page-movies",
+      title: "Movies — IDMS",
       loc: `${SITE_URL}/movies.html`,
-      summary: "Browse and watch trending, popular and top-rated movies free on MOVFLIX."
+      summary: "Browse and watch trending, popular, and top-rated movies free on IDMS."
     },
     {
-      title: "TV Series — MOVFLIX",
+      id: "page-tv",
+      title: "TV Series — IDMS",
       loc: `${SITE_URL}/tv.html`,
-      summary: "Explore top-rated and latest TV series streaming free on MOVFLIX."
+      summary: "Explore top-rated and latest TV series streaming free on IDMS."
     },
     {
-      title: "Anime — MOVFLIX",
+      id: "page-anime",
+      title: "Anime — IDMS",
       loc: `${SITE_URL}/anime.html`,
-      summary: "Stream popular and trending anime shows and movies on MOVFLIX."
+      summary: "Stream popular and trending anime shows and movies on IDMS."
     },
     {
-      title: "Privacy Policy — MOVFLIX",
+      id: "page-privacy",
+      title: "Privacy Policy — IDMS",
       loc: `${SITE_URL}/privacy.html`,
-      summary: "Movflix Privacy Policy — Learn how your data and privacy are handled."
+      summary: "IDMS Privacy Policy — Learn how your data and privacy are handled."
     },
     {
-      title: "Terms of Use — MOVFLIX",
+      id: "page-terms",
+      title: "Terms of Use — IDMS",
       loc: `${SITE_URL}/terms.html`,
-      summary: "Movflix Terms of Use and service disclaimer."
+      summary: "IDMS Terms of Use and service disclaimer."
     }
   ];
 
   const items = catalogItems();
   const mediaEntries = items.map((item) => ({
-    title: `Watch ${item.title}${item.year ? ` (${item.year})` : ""} Online Free — MOVFLIX`,
+    id: `media-${item.id}`,
+    title: `Watch ${item.title}${item.year ? ` (${item.year})` : ""} Online Free — IDMS`,
     loc: `${SITE_URL}/watch.html?id=${encodeURIComponent(item.id)}`,
-    summary: item.overview || `Watch ${item.title} free in HD on MOVFLIX.`
+    summary: item.overview || `Watch ${item.title} free in HD on IDMS.`
   }));
 
   const allEntries = [...staticPages, ...mediaEntries];
 
   const entriesXml = allEntries.map((e) => (
     `  <entry>\n` +
-    `    <title>${xmlEscape(e.title)}</title>\n` +
-    `    <link href="${xmlEscape(e.loc)}" rel="alternate" type="text/html"/>\n` +
-    `    <id>${xmlEscape(e.loc)}</id>\n` +
-    `    <updated>${updated}</updated>\n` +
-    `    <summary>${xmlEscape(e.summary)}</summary>\n` +
+    `    <id>tag:idms.eu.cc,2026:${e.id}</id>\n` +
+    `    <published>${updatedIso}</published>\n` +
+    `    <updated>${updatedIso}</updated>\n` +
+    `    <title type='text'>${xmlEscape(e.title)}</title>\n` +
+    `    <summary type='html'>${xmlEscape(e.summary)}</summary>\n` +
+    `    <link rel='alternate' type='text/html' href='${xmlEscape(e.loc)}' title='${xmlEscape(e.title)}'/>\n` +
+    `    <author>\n` +
+    `      <name>IDMS</name>\n` +
+    `      <email>noreply@idms.eu.cc</email>\n` +
+    `    </author>\n` +
     `  </entry>`
   )).join("\n");
 
   return (
-    `<?xml version="1.0" encoding="UTF-8"?>\n` +
-    `<feed xmlns="http://www.w3.org/2005/Atom">\n` +
-    `  <title>MOVFLIX</title>\n` +
-    `  <subtitle>Watch Movies, TV Series &amp; Anime Online Free</subtitle>\n` +
-    `  <link href="${SITE_URL}/atom.xml" rel="self" type="application/atom+xml"/>\n` +
-    `  <link href="${SITE_URL}/" rel="alternate" type="text/html"/>\n` +
-    `  <id>${SITE_URL}/</id>\n` +
-    `  <updated>${updated}</updated>\n` +
+    `<?xml version='1.0' encoding='UTF-8'?>\n` +
+    `<feed xmlns='http://www.w3.org/2005/Atom' xmlns:openSearch='http://a9.com/-/spec/opensearchrss/1.0/' xmlns:blogger='http://schemas.google.com/blogger/2008' xmlns:georss='http://www.georss.org/georss' xmlns:gd='http://schemas.google.com/g/2005' xmlns:thr='http://purl.org/syndication/thread/1.0'>\n` +
+    `  <id>tag:idms.eu.cc,2026:feed</id>\n` +
+    `  <updated>${updatedIso}</updated>\n` +
+    `  <title type='text'>IDMS – Discover Latest Movies, Popular Films &amp; Entertainment</title>\n` +
+    `  <subtitle type='html'>IDMS is your destination for discovering movies and entertainment. Explore the latest movies, popular films, movie details, trailers, genres, and entertainment updates in one place. Enjoy a simple and user-friendly movie browsing experience.</subtitle>\n` +
+    `  <link rel='http://schemas.google.com/g/2005#feed' type='application/atom+xml' href='${SITE_URL}/feeds/posts/default'/>\n` +
+    `  <link rel='self' type='application/atom+xml' href='${SITE_URL}/atom.xml'/>\n` +
+    `  <link rel='alternate' type='text/html' href='${SITE_URL}/'/>\n` +
     `  <author>\n` +
-    `    <name>MOVFLIX</name>\n` +
+    `    <name>IDMS</name>\n` +
+    `    <email>noreply@idms.eu.cc</email>\n` +
     `  </author>\n` +
+    `  <generator version='7.00' uri='https://idms.eu.cc'>IDMS</generator>\n` +
+    `  <openSearch:totalResults>${allEntries.length}</openSearch:totalResults>\n` +
+    `  <openSearch:startIndex>1</openSearch:startIndex>\n` +
+    `  <openSearch:itemsPerPage>500</openSearch:itemsPerPage>\n` +
     `${entriesXml}\n` +
     `</feed>\n`
   );
@@ -491,6 +509,7 @@ const server = http.createServer((req, res) => {
     normPath === "/sitemap-index.xml" ||
     normPath === "/mysite.xml" ||
     normPath === "/atom.xml" ||
+    normPath === "/feeds/posts/default" ||
     normPath === "/feed.xml" ||
     normPath === "/rss.xml" ||
     normPath === "/sitemap.txt" ||
