@@ -1,24 +1,4 @@
 User-agent: *
-Allow: /sitemap.xml
-Allow: /sitemap_index.xml
-Allow: /atom.xml
-Allow: /feed.xml
-Allow: /sitemap.txt
-Allow: /robots.txt
 Allow: /
-Allow: /watch.html
-Allow: /movies.html
-Allow: /tv.html
-Allow: /anime.html
-Allow: /privacy.html
-Allow: /terms.html
-Disallow: /search.html
-Disallow: /mylist.html
-Disallow: /history.html
-Disallow: /api/
-Disallow: /healthz
 
 Sitemap: https://idms.eu.cc/sitemap.xml
-Sitemap: https://idms.eu.cc/atom.xml
-Sitemap: https://idms.eu.cc/feed.xml
-Sitemap: https://idms.eu.cc/sitemap.txt
