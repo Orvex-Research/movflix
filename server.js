@@ -419,7 +419,7 @@ function sendCrawlerBody(req, res, contentType, body) {
   const hash = crypto.createHash("md5").update(buf).digest("hex");
   res.setHeader("Content-Type", contentType);
   res.setHeader("Content-Length", String(buf.length));
-  res.setHeader("Cache-Control", "public, max-age=300");
+  res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
   res.setHeader("ETag", `"${hash}"`);
   const todayUtc = new Date();
   todayUtc.setUTCHours(0, 0, 0, 0);
