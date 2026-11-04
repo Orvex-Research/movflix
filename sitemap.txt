@@ -2,6 +2,8 @@ https://idms.eu.cc/
 https://idms.eu.cc/movies.html
 https://idms.eu.cc/tv.html
 https://idms.eu.cc/anime.html
+https://idms.eu.cc/privacy.html
+https://idms.eu.cc/terms.html
 https://idms.eu.cc/watch.html?id=stranger-things
 https://idms.eu.cc/watch.html?id=arcane
 https://idms.eu.cc/watch.html?id=the-last-of-us

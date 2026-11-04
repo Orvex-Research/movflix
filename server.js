@@ -485,7 +485,9 @@ function serveFile(req, res, filePath) {
 const server = http.createServer((req, res) => {
   let url;
   try {
-    url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
+    // Collapse consecutive leading slashes so '//sitemap.xml' is not parsed as host 'sitemap.xml'
+    const cleanReqUrl = (req.url || "/").replace(/^\/+/, "/");
+    url = new URL(cleanReqUrl, `http://${req.headers.host || "localhost"}`);
   } catch (e) {
     res.writeHead(400); res.end("Bad request"); return;
   }
@@ -500,7 +502,7 @@ const server = http.createServer((req, res) => {
     res.end("ok"); return;
   }
 
-  const normPath = url.pathname.replace(/\/+$/, "") || "/";
+  const normPath = (url.pathname.replace(/^\/+/, "/").replace(/\/+$/, "") || "/").toLowerCase();
 
     // Googlebot issues HEAD then GET and does not follow sitemap redirects.
   if (
