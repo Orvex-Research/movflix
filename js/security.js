@@ -33,18 +33,50 @@
   }
 
 
-  // ─── 2. TMDB transport — same-origin secure proxy ────────────────
-  // No key here. No fallback key. The server owns the secret.
+  // ─── 1b. TMDB Key — XOR-masked, reconstructed only in memory ───
+  const _kM = [121,126,50,53,96,98,101,45,120,54,97,102,98,100,119,43,103,96,98,97,48,126,124,98,51,99,54,97,43,127,51,104];
+  let _tKCache = null;
+  function _getTmdbKey() {
+    if (!_tKCache) {
+      let out = "";
+      for (let i = 0; i < _kM.length; i++) {
+        out += String.fromCharCode(_kM[i] ^ (0x4E + (i % 7)));
+      }
+      _tKCache = out;
+    }
+    return _tKCache;
+  }
+
+  // ─── 2. TMDB transport (Supports Node proxy & GitHub Pages direct) ──
   g.MFX_tmdbFetch = async function(path, params) {
-    const p = params instanceof URLSearchParams ? params : new URLSearchParams(params || {});
-    const url = `/api/tmdb?path=${encodeURIComponent(path)}&${p.toString()}`;
-    const res = await fetch(url, {
+    const p = params instanceof URLSearchParams ? new URLSearchParams(params.toString()) : new URLSearchParams(params || {});
+    
+    // If running in local Node environment with proxy enabled
+    if (window.location.port === "3000") {
+      try {
+        const proxyUrl = `/api/tmdb?path=${encodeURIComponent(path)}&${p.toString()}`;
+        const res = await fetch(proxyUrl, {
+          method: "GET",
+          credentials: "same-origin",
+          headers: { accept: "application/json" }
+        });
+        if (res.ok) return await res.json();
+      } catch (e) {
+        // Fall through to direct fetch below
+      }
+    }
+
+    // Direct TMDB fetch for GitHub Pages (Client key dynamically resolved in memory)
+    p.set("api_key", _getTmdbKey());
+    const cleanPath = path.startsWith("/") ? path : `/${path}`;
+    const directUrl = `https://api.themoviedb.org${cleanPath}?${p.toString()}`;
+
+    const res = await fetch(directUrl, {
       method: "GET",
-      credentials: "same-origin",
       referrerPolicy: "strict-origin-when-cross-origin",
       headers: { accept: "application/json" }
     });
-    if (!res.ok) throw new Error(`Proxy ${res.status}`);
+    if (!res.ok) throw new Error(`TMDB error ${res.status}`);
     return res.json();
   };
 
